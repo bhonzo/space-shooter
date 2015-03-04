@@ -54,8 +54,26 @@ public class Enemy extends Soldier {
 		
 		if(this.isActive())
 		{
+			if(!this.hasReachedTarget(target))
 			followTarget(target, ds);
+			else selectRandomTarget();
 		}
+	}
+	/** 
+	 * 
+	 * just for testing 
+	 */
+	private void selectRandomTarget() {
+		// TODO Auto-generated method stub
+		target = new Vector2((float)(Math.random()*400),(float)(Math.random()*400));
+	}
+
+	private boolean hasReachedTarget(Vector2 target)
+	{
+		if(target.dst2(this.getPosition())<4)
+			return true; 
+		
+		return false; 
 	}
 
 	private void followTarget(Vector2 target, float ds) {
