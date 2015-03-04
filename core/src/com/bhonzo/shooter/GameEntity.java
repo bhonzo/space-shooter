@@ -8,12 +8,21 @@ public class GameEntity {
 	private final int id; 
 	private final Vector2 position ; 
 	private final Vector2 heading ; 
+	private boolean active = true; 
 	public GameEntity()
 	{id = nextID++;
 	
 	position = new Vector2(0,0); 
 	heading = new Vector2(1,0); 
 		
+	}
+	public void setActive(boolean active)
+	{
+		this.active = active; 
+	}
+	public boolean isActive()
+	{
+		return this.active;
 	}
 
 	public int getID() {
@@ -34,6 +43,7 @@ public class GameEntity {
 	public void setHeading(Vector2 newheading) {
 		// TODO Auto-generated method stub
 		this.heading.set(newheading);
+		this.heading.nor();
 		
 	}
 	public Vector2 getHeading()

@@ -36,5 +36,6 @@ public class GameEntityTest {
 		assertEquals(entity1.getHeading().x == 0, true); 
 		assertEquals(entity1.getHeading().y== 1,true); 
 	}
+	
 
 }
