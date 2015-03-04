@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>shooter</name>
+	<name>space-shooter</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -17,7 +17,7 @@
 	</natures>
 	<filteredResources>
 		<filter>
-			<id>1425280682489</id>
+			<id>1425474569902</id>
 			<name></name>
 			<type>26</type>
 			<matcher>
