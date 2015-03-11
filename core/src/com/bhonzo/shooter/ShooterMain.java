@@ -3,6 +3,7 @@ package com.bhonzo.shooter;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -24,13 +25,25 @@ public class ShooterMain extends ApplicationAdapter implements InputProcessor {
     
     Enemy enemyTest ;
     Sprite enemySprite ; 
+      
+    Player playerTest;
+    Sprite playerSprite;
+    
+    private Vector2 velocity;
+    private Vector2 position;
+    private float angle;
+    private float rotationSpeed;   
+    
+    
+    
 	
 	@Override
-	public void create () {
-		batch = new SpriteBatch();
+	public void create () {	
+		
+			batch = new SpriteBatch();
 		//img = new Texture("badlogic.jpg");
 	//
-		 float w = Gdx.graphics.getWidth();
+		 	float w = Gdx.graphics.getWidth();
 	        float h = Gdx.graphics.getHeight();
 
 	        camera = new OrthographicCamera();
@@ -48,28 +61,34 @@ public class ShooterMain extends ApplicationAdapter implements InputProcessor {
 		//
 		enemyTest = new Enemy(100,30);
 		enemyTest.setPosition(new Vector2(w/2,h/2));
-		enemySprite = new Sprite(new Texture("enemy.png"));
+		enemySprite = new Sprite(new Texture("enemy.png"));		
+		
+		playerTest = new Player(100);
+		playerTest.setPosition(new Vector2(w/2,h/2));
+		playerSprite = new Sprite(new Texture("enemy.png"));	
 		
 	}
 
 	@Override
-	public void render () {
+	public void render () {	
+		
 		float ds = Gdx.graphics.getDeltaTime();
 		enemyTest.update(ds);
 		Gdx.gl.glClearColor(1, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		 camera.update();
-	        tiledMapRenderer.setView(camera);
-	        tiledMapRenderer.render();
-		batch.begin();
-	//	batch.draw(img, 0, 0);
+	    camera.update();
+	    tiledMapRenderer.setView(camera);
+	    tiledMapRenderer.render();
+		batch.begin();		
 		
-		// draw sum srrites 
+		// draw sum sprites 		
 		enemySprite.setPosition(enemyTest.getPosition().x, enemyTest.getPosition().y);
 		enemySprite.setRotation(enemyTest.getHeading().angle());
+		playerSprite.setRotation(playerTest.getHeading().angle());
 		enemySprite.draw(batch);
-		
+		playerSprite.draw(batch);
 		batch.end();
+		
 	}
 
 	@Override
@@ -84,11 +103,21 @@ public class ShooterMain extends ApplicationAdapter implements InputProcessor {
 		 if(keycode == Input.Keys.LEFT)
 	            camera.translate(-32,0);
 	        if(keycode == Input.Keys.RIGHT)
-	            camera.translate(32,0);
-	        if(keycode == Input.Keys.UP)
-	            camera.translate(0,-32);
+	        	camera.translate(32,0);
 	        if(keycode == Input.Keys.DOWN)
-	            camera.translate(0,32);
+	        	camera.translate(0,-32);
+	        if(keycode == Input.Keys.UP)
+	        	camera.translate(0,32);
+	        //This isn't pretty, but it's the only way I know how to make the player sprite move at the moment.
+	        
+	        if(keycode == Input.Keys.A)
+	            playerSprite.translate(-32,0);
+	        if(keycode == Input.Keys.D)
+	        	playerSprite.translate(32,0);
+	        if(keycode == Input.Keys.S)
+	        	playerSprite.translate(0,-32);
+	        if(keycode == Input.Keys.W)
+	        	playerSprite.translate(0,32);
 		return false;
 	}
 
