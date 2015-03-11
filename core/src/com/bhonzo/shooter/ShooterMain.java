@@ -14,6 +14,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 public class ShooterMain extends ApplicationAdapter implements InputProcessor {
@@ -26,23 +27,23 @@ public class ShooterMain extends ApplicationAdapter implements InputProcessor {
     Enemy enemyTest ;
     Sprite enemySprite ; 
       
-    Player playerTest;
-    Sprite playerSprite;
+    private Player player1;
     
     private Vector2 velocity;
     private Vector2 position;
     private float angle;
     private float rotationSpeed;   
-    
-    
+  
     
 	
 	@Override
 	public void create () {	
 		
 			batch = new SpriteBatch();
-		//img = new Texture("badlogic.jpg");
-	//
+			
+			player1 = new Player(100);
+			player1.setPosition(200, 100);
+			
 		 	float w = Gdx.graphics.getWidth();
 	        float h = Gdx.graphics.getHeight();
 
@@ -63,34 +64,51 @@ public class ShooterMain extends ApplicationAdapter implements InputProcessor {
 		enemyTest.setPosition(new Vector2(w/2,h/2));
 		enemySprite = new Sprite(new Texture("enemy.png"));		
 		
-		playerTest = new Player(100);
-		playerTest.setPosition(new Vector2(w/2,h/2));
-		playerSprite = new Sprite(new Texture("enemy.png"));	
+		
 		
 	}
 
 	@Override
 	public void render () {	
-		
 		float ds = Gdx.graphics.getDeltaTime();
+		
 		enemyTest.update(ds);
+		
 		Gdx.gl.glClearColor(1, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		
 	    camera.update();
 	    tiledMapRenderer.setView(camera);
 	    tiledMapRenderer.render();
-		batch.begin();		
-		
+	    
+	    
+		batch.begin();			 
+		    
 		// draw sum sprites 		
 		enemySprite.setPosition(enemyTest.getPosition().x, enemyTest.getPosition().y);
 		enemySprite.setRotation(enemyTest.getHeading().angle());
-		playerSprite.setRotation(playerTest.getHeading().angle());
 		enemySprite.draw(batch);
-		playerSprite.draw(batch);
+		player1.draw(batch);	
 		batch.end();
+		
+		//Controls
+		
+		if(Gdx.input.isKeyPressed(Input.Keys.J)){
+			player1.moveLeft(Gdx.graphics.getDeltaTime());
+		}
+		if(Gdx.input.isKeyPressed(Input.Keys.L)){
+			player1.moveRight(Gdx.graphics.getDeltaTime());
+		}
+		if(Gdx.input.isKeyPressed(Input.Keys.K)){
+			player1.moveDown(Gdx.graphics.getDeltaTime());
+		}
+		if(Gdx.input.isKeyPressed(Input.Keys.I)){
+			player1.moveUp(Gdx.graphics.getDeltaTime());
+		}
 		
 	}
 
+	
 	@Override
 	public boolean keyDown(int keycode) {
 		// TODO Auto-generated method stub
@@ -109,16 +127,7 @@ public class ShooterMain extends ApplicationAdapter implements InputProcessor {
 	        if(keycode == Input.Keys.UP)
 	        	camera.translate(0,32);
 	        //This isn't pretty, but it's the only way I know how to make the player sprite move at the moment.
-	        
-	        if(keycode == Input.Keys.A)
-	            playerSprite.translate(-32,0);
-	        if(keycode == Input.Keys.D)
-	        	playerSprite.translate(32,0);
-	        if(keycode == Input.Keys.S)
-	        	playerSprite.translate(0,-32);
-	        if(keycode == Input.Keys.W)
-	        	playerSprite.translate(0,32);
-		return false;
+	     return false;
 	}
 
 	@Override
@@ -127,6 +136,11 @@ public class ShooterMain extends ApplicationAdapter implements InputProcessor {
 		return false;
 	}
 
+	@Override
+	public void dispose(){
+		batch.dispose();
+	}
+	
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		// TODO Auto-generated method stub
