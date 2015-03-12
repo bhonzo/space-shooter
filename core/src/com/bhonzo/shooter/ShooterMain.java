@@ -24,20 +24,27 @@ public class ShooterMain extends ApplicationAdapter implements InputProcessor {
     
     Enemy enemyTest ;
     Sprite enemySprite ; 
+    
+    private Player player1;
 	
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		//img = new Texture("badlogic.jpg");
-	//
-		 float w = Gdx.graphics.getWidth();
-	        float h = Gdx.graphics.getHeight();
+		
+		//Create new player 
+		player1 = new Player(100);
+		player1.setPosition(200,100);
+		
+		
+		float w = Gdx.graphics.getWidth();
+	    float h = Gdx.graphics.getHeight();
 
-	        camera = new OrthographicCamera();
-	        camera.setToOrtho(false,w,h);
-	        camera.update();
-	        tiledMap = new TmxMapLoader().load("level1map.tmx");
-	        tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
+	    
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false,w,h);
+        camera.update();
+        tiledMap = new TmxMapLoader().load("level1map.tmx");
+        tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
 		  
 		
 		//to listen to user inoput 
@@ -61,15 +68,43 @@ public class ShooterMain extends ApplicationAdapter implements InputProcessor {
 		 camera.update();
 	        tiledMapRenderer.setView(camera);
 	        tiledMapRenderer.render();
-		batch.begin();
-	//	batch.draw(img, 0, 0);
-		
-		// draw sum srrites 
+	      
+		batch.begin();		 
+		// draw some sprites 
+		player1.draw(batch); 
 		enemySprite.setPosition(enemyTest.getPosition().x, enemyTest.getPosition().y);
 		enemySprite.setRotation(enemyTest.getHeading().angle());
-		enemySprite.draw(batch);
-		
+		enemySprite.draw(batch);		
 		batch.end();
+		
+		//Controls
+		if(Gdx.input.isKeyPressed(Input.Keys.A)){
+			player1.moveLeft(Gdx.graphics.getDeltaTime());
+		}
+		if(Gdx.input.isKeyPressed(Input.Keys.D)){
+			player1.moveRight(Gdx.graphics.getDeltaTime());
+		}
+		if(Gdx.input.isKeyPressed(Input.Keys.S)){
+			player1.moveDown(Gdx.graphics.getDeltaTime());
+		}
+		if(Gdx.input.isKeyPressed(Input.Keys.W)){
+			player1.moveUp(Gdx.graphics.getDeltaTime());
+		}
+		if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)){
+			if(Gdx.input.isKeyPressed(Input.Keys.A)){
+				player1.moveLeft(Gdx.graphics.getDeltaTime()*1.35f);
+			}
+			if(Gdx.input.isKeyPressed(Input.Keys.D)){
+				player1.moveRight(Gdx.graphics.getDeltaTime()*1.35f);
+			}
+			if(Gdx.input.isKeyPressed(Input.Keys.S)){
+				player1.moveDown(Gdx.graphics.getDeltaTime()*1.35f);
+			}
+			if(Gdx.input.isKeyPressed(Input.Keys.W)){
+				player1.moveUp(Gdx.graphics.getDeltaTime()*1.35f);
+			}
+			//player1.moveUp(Gdx.graphics.getDeltaTime());
+		}
 	}
 
 	@Override
