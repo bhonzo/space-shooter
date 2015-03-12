@@ -1,6 +1,4 @@
 package com.bhonzo.shooter;
-import com.badlogic.gdx.math.Vector2;
-
 
 public class Player extends Soldier {
 
@@ -8,7 +6,7 @@ public class Player extends Soldier {
 		super(health);
 		// TODO Auto-generated constructor stub
 		
-	
+	int x = 0;
 	}
 
 }
