@@ -44,22 +44,22 @@ public class Player extends Soldier {
 	}
 	
 	public void moveLeft(float delta){
-		bottom.x -= (200 * delta);
+		bottom.x -= (100 * delta);
 		sprite.setPosition(bottom.x, bottom.y);
 	}
 	
 	public void moveRight(float delta){
-			bottom.x += (200 * delta);
+			bottom.x += (100 * delta);
 			sprite.setPosition(bottom.x, bottom.y);
 		}
 		
 	public void moveUp(float delta){
-		bottom.y += (200 * delta);
+		bottom.y += (100 * delta);
 		sprite.setPosition(bottom.x, bottom.y);
 	}
 	
 	public void moveDown(float delta){
-		bottom.y -= (200 * delta);
+		bottom.y -= (100 * delta);
 		sprite.setPosition(bottom.x, bottom.y);
 	}
 
