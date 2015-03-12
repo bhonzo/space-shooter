@@ -23,7 +23,6 @@ public class Weapon  extends GameEntity{
 		time = time*1000; 
 		
 		if(System.currentTimeMillis()-this.lastTimeFired>time)
-		
 		return true;
 		
 		return false; 
