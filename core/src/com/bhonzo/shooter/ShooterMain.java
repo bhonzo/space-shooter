@@ -23,7 +23,7 @@ public class ShooterMain extends ApplicationAdapter implements InputProcessor {
     TiledMapRenderer tiledMapRenderer;
     
     Enemy enemyTest ;
-    Sprite enemySprite ; 
+ 
     
     private Player player1;
 	
@@ -32,8 +32,10 @@ public class ShooterMain extends ApplicationAdapter implements InputProcessor {
 		batch = new SpriteBatch();
 		
 		//Create new player 
-		player1 = new Player(100);
-		player1.setPosition(200,100);
+		
+	
+		player1 = new Player(100 ,new Sprite(new Texture("enemy.png")));
+		player1.setPosition(new Vector2(200,100));
 		
 		
 		float w = Gdx.graphics.getWidth();
@@ -53,9 +55,9 @@ public class ShooterMain extends ApplicationAdapter implements InputProcessor {
 		
 		
 		//
-		enemyTest = new Enemy(100,30);
+		enemyTest = new Enemy(100,30 , new Sprite(new Texture("enemy.png")));
 		enemyTest.setPosition(new Vector2(w/2,h/2));
-		enemySprite = new Sprite(new Texture("enemy.png"));
+		
 		
 	}
 
@@ -72,14 +74,17 @@ public class ShooterMain extends ApplicationAdapter implements InputProcessor {
 		batch.begin();		 
 		// draw some sprites 
 		player1.draw(batch); 
-		enemySprite.setPosition(enemyTest.getPosition().x, enemyTest.getPosition().y);
-		enemySprite.setRotation(enemyTest.getHeading().angle());
-		enemySprite.draw(batch);		
+		
+		enemyTest.draw(batch);		
 		batch.end();
 		
+		Vector2 prevPlayerPos = new Vector2(player1.getPosition());
 		//Controls
 		if(Gdx.input.isKeyPressed(Input.Keys.A)){
+			
+			
 			player1.moveLeft(Gdx.graphics.getDeltaTime());
+			
 		}
 		if(Gdx.input.isKeyPressed(Input.Keys.D)){
 			player1.moveRight(Gdx.graphics.getDeltaTime());
@@ -105,6 +110,11 @@ public class ShooterMain extends ApplicationAdapter implements InputProcessor {
 			}
 			//player1.moveUp(Gdx.graphics.getDeltaTime());
 		}
+		
+		//update camera 
+		Vector2 newCameraPos = new Vector2(this.player1.getPosition());
+		newCameraPos.sub(prevPlayerPos);
+		camera.translate(newCameraPos.x, newCameraPos.y);
 	}
 
 	@Override

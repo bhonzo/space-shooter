@@ -1,13 +1,14 @@
 package com.bhonzo.shooter;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 
 
 public class Enemy extends Soldier { 
     private Vector2 target = new Vector2(); 
     private float speed =  10; 
-	public Enemy(float health , float walkingspeed) {
-		super(health);
+	public Enemy(float health , float walkingspeed , Sprite sprite) {
+		super(health,sprite);
 		this.speed = walkingspeed; 
 		// TODO Auto-generated constructor stub
 	}

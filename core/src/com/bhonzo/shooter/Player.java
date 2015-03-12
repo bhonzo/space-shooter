@@ -10,15 +10,14 @@ import com.badlogic.gdx.math.Vector2;
 @SuppressWarnings("unused")
 public class Player extends Soldier {
 	Rectangle bottom, left, right, top;
-	Sprite sprite;
+
 	int action;
 	float velocity;
 
-	public Player(float health) {
-		super(health);
+	public Player(float health ,Sprite sprite) {
+		super(health ,sprite);
 		bottom = new Rectangle(0.0f, 0.0f, 128.0f, 128.0f);
-		sprite = new Sprite(new Texture("enemy.png"));	
-		this.setPosition(0,0);	
+		
 	}
 
 	public int hits(Rectangle r){
@@ -37,34 +36,32 @@ public class Player extends Soldier {
 	}
 	
 	
-	public void setPosition(float x, float y){
-		bottom.x = x;
-		bottom.y = y;
-		sprite.setPosition(x, y);
+	public void setPosition(Vector2 newpos){
+		bottom.x = newpos.x;
+		bottom.y = newpos.y;
+		super.setPosition(newpos);
 	}
 	
 	public void moveLeft(float delta){
 		bottom.x -= (100 * delta);
-		sprite.setPosition(bottom.x, bottom.y);
+		setPosition(new Vector2(bottom.x, bottom.y));
 	}
 	
 	public void moveRight(float delta){
 			bottom.x += (100 * delta);
-			sprite.setPosition(bottom.x, bottom.y);
+			setPosition(new Vector2(bottom.x, bottom.y));
 		}
 		
 	public void moveUp(float delta){
 		bottom.y += (100 * delta);
-		sprite.setPosition(bottom.x, bottom.y);
+		setPosition(new Vector2(bottom.x, bottom.y));
 	}
 	
 	public void moveDown(float delta){
 		bottom.y -= (100 * delta);
-		sprite.setPosition(bottom.x, bottom.y);
+		setPosition(new Vector2(bottom.x, bottom.y));
 	}
 
-	public void draw(SpriteBatch batch){
-		sprite.draw(batch);
-	}
+	
 }
 //change

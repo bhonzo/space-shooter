@@ -1,14 +1,19 @@
 package com.bhonzo.shooter;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 public class Soldier extends GameEntity {
 	
 	
 	private float health = 100;
-	private Weapon weapon = null; 
+	private Weapon weapon = null;
+	private Sprite sprite = null; 
 
-	public Soldier(float health) {
+	public Soldier(float health , Sprite sprite) {
 		// TODO Auto-generated constructor stub
-		this.health = health; 
+		this.health = health;
+		this.sprite = sprite;  
 	}
 	
 	
@@ -36,6 +41,15 @@ public class Soldier extends GameEntity {
 	public boolean hasWeapon()
 	{
 		return weapon != null; 
+	}
+	public void draw(SpriteBatch batch){
+	
+		if(sprite!=null)
+		{
+			sprite.setPosition(this.getPosition().x, this.getPosition().y);
+			sprite.setRotation(getHeading().angle());
+			sprite.draw(batch);
+		}
 	}
 
 }
