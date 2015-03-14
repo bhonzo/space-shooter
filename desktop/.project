@@ -21,5 +21,10 @@
 			<type>2</type>
 			<locationURI>PARENT-1-PROJECT_LOC/android/assets</locationURI>
 		</link>
+		<link>
+			<name>source</name>
+			<type>2</type>
+			<location>C:/Users/David/Documents/GitHub/space-shooter/android/assets</location>
+		</link>
 	</linkedResources>
 </projectDescription>

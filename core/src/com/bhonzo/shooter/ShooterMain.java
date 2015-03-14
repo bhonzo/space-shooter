@@ -1,5 +1,7 @@
 package com.bhonzo.shooter;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -13,69 +15,113 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public class ShooterMain extends ApplicationAdapter implements InputProcessor {
-	SpriteBatch batch;
-	//Texture img;
-	TiledMap tiledMap;
-    OrthographicCamera camera;
-    TiledMapRenderer tiledMapRenderer;
-    
-    Enemy enemyTest ;
-    Sprite enemySprite ; 
-    
-    private Player player1;
 	
+			SpriteBatch 							batch;
+			TiledMap 								tiledMap;
+		    OrthographicCamera 						camera;
+		    TiledMapRenderer 						tiledMapRenderer;    
+		    Enemy 									enemyTest ;
+		    Sprite 									enemySprite ; 
+		    
+		    private Player 							player1;
+		    private ArrayList<GameObject> list = 	new ArrayList<GameObject>();
+			
 	@Override
 	public void create () {
-		batch = new SpriteBatch();
 		
-		//Create new player 
-		player1 = new Player(100);
-		player1.setPosition(200,100);
+			float w = Gdx.graphics.getWidth();
+		    float h = Gdx.graphics.getHeight();
 		
+			camera = new OrthographicCamera();
+	        camera.setToOrtho(false,w,h);
 		
-		float w = Gdx.graphics.getWidth();
-	    float h = Gdx.graphics.getHeight();
-
-	    
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false,w,h);
-        camera.update();
-        tiledMap = new TmxMapLoader().load("level1map.tmx");
-        tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
-		  
-		
-		//to listen to user inoput 
-		Gdx.input.setInputProcessor(this);
-		
-		
-		
-		//
-		enemyTest = new Enemy(100,30);
-		enemyTest.setPosition(new Vector2(w/2,h/2));
-		enemySprite = new Sprite(new Texture("enemy.png"));
+			batch = new SpriteBatch();
+			
+			//Create new player 
+			player1 = new Player(100);
+			player1.setPosition(200,100);
+			
+			// add some test blocks to interact with
+			list.add(new Brick(0,0));
+			list.add(new Brick(64,0));
+			list.add(new Brick(128,0));
+			list.add(new Brick(256,128));
+			list.add(new Brick(320,128));		    
+	        
+	        camera.update();
+	        
+	        tiledMap = new TmxMapLoader().load("level1map.tmx");
+	        tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
+			  
+			
+			//to listen to user input 
+			Gdx.input.setInputProcessor(this);	
+			
+			//
+			enemyTest = new Enemy(100,30);
+			enemyTest.setPosition(new Vector2(w/2,h/2));
+			enemySprite = new Sprite(new Texture("enemy.png"));
 		
 	}
 
 	@Override
 	public void render () {
+		
 		float ds = Gdx.graphics.getDeltaTime();
-		enemyTest.update(ds);
+		
 		Gdx.gl.glClearColor(1, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		 camera.update();
-	        tiledMapRenderer.setView(camera);
-	        tiledMapRenderer.render();
-	      
-		batch.begin();		 
-		// draw some sprites 
+		camera.update();
+		
+	    tiledMapRenderer.setView(camera);
+	    tiledMapRenderer.render();
+	    
+	    enemyTest.update(ds);	    
+	    batch.setProjectionMatrix(camera.combined);
+	   
+	    
+		batch.begin();	
+		
+		for(GameObject t : list){
+			t.draw(batch);
+		}
+		
+		
 		player1.draw(batch); 
 		enemySprite.setPosition(enemyTest.getPosition().x, enemyTest.getPosition().y);
 		enemySprite.setRotation(enemyTest.getHeading().angle());
-		enemySprite.draw(batch);		
+		enemySprite.draw(batch);
 		batch.end();
+		
+		
+		//Updates
+		player1.update(Gdx.graphics.getDeltaTime());
+		
+		Rectangle temp = new Rectangle(0,0, Gdx.graphics.getWidth(),5);
+		
+		if(player1.hits(temp) != -1){
+			player1.action(1, 0 , 10);
+		}
+		
+		for (GameObject t : list){
+			switch (player1.hits(t.getHitBox())){
+			case 1:
+				player1.action(1, 0, t.getHitBox().y + t.getHitBox().height);
+				break;
+			case 2:
+				player1.action(2, t.getHitBox().x + t.getHitBox().width + 1, 0);
+				break;
+			case 3:
+				player1.action(3, t.getHitBox().x - player1.getHitBox().width - 1,0);
+				break;
+			case 4:
+				player1.action(4,0, t.getHitBox().y - player1.getHitBox().height);
+			}
+		}
 		
 		//Controls
 		if(Gdx.input.isKeyPressed(Input.Keys.A)){
