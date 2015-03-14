@@ -9,25 +9,23 @@ import com.badlogic.gdx.math.Vector2;
 
 @SuppressWarnings("unused")
 public class Player extends Soldier {
-	Rectangle bottom, left, right, top, full;
-	Sprite sprite;
-	Texture texture;
-	int action;
-	float velocityY;
-	int direction = 0;
+		Rectangle 				bottom, left, right, top, full;
+		Sprite 					sprite;
+		Texture 				texture;
+		int 					action;
+		float 					velocityY, velocityX;
+		int 					direction = 0;
 
 	public Player(float health) {
 		super(health);
 		
-		full   = new Rectangle(0, 0, 128, 128);
+		full   		= 			new Rectangle(0, 0, 128, 128);		
+		bottom 		= 			new Rectangle(0, 0, 64, 8);
+		left   		=			new Rectangle(0, 16, 32, 48);
+		right  		= 			new Rectangle(32, 16, 32, 48);
+		top    		= 			new Rectangle(0, 48, 64, 8);		
+		sprite 		= 			new Sprite(new Texture("enemy.png"));	
 		
-		bottom = new Rectangle(0, 0, 64, 8);
-		left   = new Rectangle(0, 16, 32, 48);
-		right  = new Rectangle(32, 16, 32, 48);
-		top    = new Rectangle(0, 48, 64, 8);
-		
-		//texture = new Texture(Gdx.files.internal("enemy.png"));
-		sprite = new Sprite(new Texture("enemy.png"));			
 		this.setPosition(0,0);	
 	}
 
@@ -66,26 +64,28 @@ public class Player extends Soldier {
 	
 	public void update(float delta) {
 		velocityY -= 0;
+		velocityX -= 0;
 		bottom.y += velocityY;
+		bottom.x += velocityX;
 		sprite.setPosition(bottom.x,bottom.y);
 	}
 	
 	
 	public void setPosition(float x, float y) {
-		full.x  = x;
-		full.y  = y;
+		full.x  	= 			x;
+		full.y  	= 			y;
 		
-		bottom.x = x;
-		bottom.y = y;
+		bottom.x 	= 			x;
+		bottom.y 	= 			y;
 
-		left.x = x;
-		left.y = y + 16;
+		left.x 		= 			x;
+		left.y		= 			y + 16;
 		
-		right.x = x + 32;
-		right.y = y + 16;
+		right.x 	= 			x + 32;
+		right.y 	= 			y + 16;
 		
-		top.x = x;
-		top.y = y + 56;
+		top.x 		= 			x;
+		top.y		= 			y + 56;
 		
 		sprite.setPosition(x, y);
 	}
