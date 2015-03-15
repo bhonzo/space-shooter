@@ -14,7 +14,7 @@ public class EnemyTest {
 	public void facingPlayerTest() {
 		
 		
-		Enemy enemy = new Enemy(100,10); 
+		Enemy enemy = new Enemy(100,10 ,null); 
 	
 		Vector2 target = new Vector2(100,100);
 		Vector2 target2 = new Vector2(-100,-100);
@@ -27,7 +27,7 @@ public class EnemyTest {
 	@Test
 	public void lineOfSightTest()
 	{
-		Enemy enemy = new Enemy(100,10); 
+		Enemy enemy = new Enemy(100,10,null); 
 		Vector2 target = new Vector2(0,100);
 		Vector2 target2 = new Vector2(0,-100);
 		Vector2 target3 = new Vector2(-50,-50);
