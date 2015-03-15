@@ -110,14 +110,15 @@ public void render () {
 		case 1:
 			player1.action(1, 0, t.getHitBox().y + t.getHitBox().height);
 			break;
-		case 2:
-			player1.action(2, t.getHitBox().x + t.getHitBox().width + 1, 0);
-			break;
-		case 3:
-			player1.action(3, t.getHitBox().x - player1.getHitBox().width - 1,0);
-			break;
-		case 4:
-			player1.action(4,0, t.getHitBox().y - player1.getHitBox().height);
+		//case 2:
+			//player1.action(2, t.getHitBox().x + t.getHitBox().width + 1, 0);
+			//player1.action(2, t.getHitBox().x + t.getHitBox().width + 2, 0);
+			//break;
+		//case 3:
+			//player1.action(3, t.getHitBox().x - player1.getHitBox().width - 2,0);
+			//break;
+		//case 4:
+			//player1.action(4,0, t.getHitBox().y - player1.getHitBox().height);
 		}
 	}
 	

@@ -19,11 +19,11 @@ public class Player extends Soldier {
 	public Player(float health) {
 		super(health);
 		
-		full   		= 			new Rectangle(0, 0, 128, 128);		
-		bottom 		= 			new Rectangle(0, 0, 64, 8);
-		left   		=			new Rectangle(0, 16, 32, 48);
-		right  		= 			new Rectangle(32, 16, 32, 48);
-		top    		= 			new Rectangle(0, 48, 64, 8);		
+		full   		= 			new Rectangle(2, 0, 64, 64);		
+		bottom 		= 			new Rectangle(0, 0, 64, 2);
+		left   		=			new Rectangle(0, 8, 32, 48);
+		right  		= 			new Rectangle(32, 8, 32, 48);
+		top    		= 			new Rectangle(0, 48, 64, 2);		
 		sprite 		= 			new Sprite(new Texture("enemy.png"));	
 		
 		this.setPosition(0,0);	
@@ -50,13 +50,23 @@ public class Player extends Soldier {
 	
 	public void action(int type, float x, float y) {
 		
-		if (type == 1 || type == 4) {
+		if (type == 1) {
 			velocityY = 0;
 			setPosition(bottom.x, y);
 		}
 		
-		if (type == 2 || type == 3) {
+		if (type == 4) {
 			velocityY = 0;
+			setPosition(bottom.x, y);
+		}
+		
+		if (type == 3) {
+			velocityX = 0;
+			setPosition(x, bottom.y);
+		}
+	
+		if (type == 2 || type == 3) {
+			velocityX = 0;
 			setPosition(x, bottom.y);
 		}		
 
@@ -79,13 +89,13 @@ public class Player extends Soldier {
 		bottom.y 	= 			y;
 
 		left.x 		= 			x;
-		left.y		= 			y + 16;
+		left.y		= 			y + 8;
 		
 		right.x 	= 			x + 32;
-		right.y 	= 			y + 16;
+		right.y 	= 			y + 8;
 		
 		top.x 		= 			x;
-		top.y		= 			y + 56;
+		top.y		= 			y + 48;
 		
 		sprite.setPosition(x, y);
 	}
