@@ -11,7 +11,11 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -23,37 +27,47 @@ public class ShooterMain extends ApplicationAdapter implements InputProcessor {
 			SpriteBatch 							batch;
 			TiledMap 								tiledMap;
 		    OrthographicCamera 						camera;
-		    TiledMapRenderer 						tiledMapRenderer;    
+		    TiledMapRenderer 						tiledMapRenderer;
+		    
 		    Enemy 									enemyTest ;
 		    Sprite 									enemySprite ; 
 		    
 		    private Player 							player1;
-		    private ArrayList<GameObject> list = 	new ArrayList<GameObject>();
+		   // private ArrayList<GameObject> list = 	new ArrayList<GameObject>();
 			
 @Override
 public void create () {
 	
-		float w 	= 		Gdx.graphics.getWidth();
-	    float h 	= 		Gdx.graphics.getHeight();		
-		camera	 	= 		new OrthographicCamera();
-		batch 		= 		new SpriteBatch();			 
-		player1 	= 		new Player(100);  				//Create new player
+		tiledMap 			= 		new TmxMapLoader().load("level1map.tmx");
+        tiledMapRenderer 	= 		new OrthogonalTiledMapRenderer(tiledMap);        
         
 		
-		camera.setToOrtho(false,w,h);						//Set camera position
-		player1.setPosition(200,100);						//Set player position
+	    
+		camera	 	= 		new OrthographicCamera();
+		batch 		= 		new SpriteBatch();			 
+					
+		float w 	= 		Gdx.graphics.getWidth();
+	    float h 	= 		Gdx.graphics.getHeight();	
+	    camera.setToOrtho(false,w,h);//Set camera position
+	    
+		//Create new player
+        player1 	= 		new Player(100,(TiledMapTileLayer) tiledMap.getLayers().get(0));								
+		player1.setPosition(5 * player1.getCollisionLayer().getTileWidth(), 5 * player1.getCollisionLayer().getTileHeight()); //Set player position
 		
+		
+		/*			
 		// add some test blocks to interact with
 		list.add(new Brick(0,0));
 		list.add(new Brick(64,0));
 		list.add(new Brick(128,0));
 		list.add(new Brick(256,128));
 		list.add(new Brick(320,128));		    
+        */
+        
         
         camera.update();
         
-        tiledMap 			= 		new TmxMapLoader().load("level1map.tmx");
-        tiledMapRenderer 	= 		new OrthogonalTiledMapRenderer(tiledMap);
+        
         
 		//to listen to user input 
 		Gdx.input.setInputProcessor(this);	
@@ -79,16 +93,15 @@ public void render () {
 	   tiledMapRenderer.setView(camera);
 	   tiledMapRenderer.render();
     
-	   enemyTest.update(ds);	    
+	  	    
 	   batch.setProjectionMatrix(camera.combined);		   
 	    
 	   batch.begin();	
-		
+		/*
 		for(GameObject t : list){
 			t.draw(batch);
 		}
-	
-	
+		*/
 		player1.draw(batch); 
 		enemySprite.setPosition(enemyTest.getPosition().x, enemyTest.getPosition().y);
 		enemySprite.setRotation(enemyTest.getHeading().angle());
@@ -96,32 +109,11 @@ public void render () {
 		batch.end();
 	
 	
-	//Updates
+	//Updates		
 		player1.update(Gdx.graphics.getDeltaTime());
+		enemyTest.update(ds);
+	
 		
-		Rectangle temp 		= 		new Rectangle(0,0, Gdx.graphics.getWidth(),5);
-	
-	if(player1.hits(temp) != -1){
-		    player1.action(1, 0 , 10);
-	}
-	
-	for (GameObject t : list){
-		switch (player1.hits(t.getHitBox())){
-		case 1:
-			player1.action(1, 0, t.getHitBox().y + t.getHitBox().height);
-			break;
-		//case 2:
-			//player1.action(2, t.getHitBox().x + t.getHitBox().width + 1, 0);
-			//player1.action(2, t.getHitBox().x + t.getHitBox().width + 2, 0);
-			//break;
-		//case 3:
-			//player1.action(3, t.getHitBox().x - player1.getHitBox().width - 2,0);
-			//break;
-		//case 4:
-			//player1.action(4,0, t.getHitBox().y - player1.getHitBox().height);
-		}
-	}
-	
 		//Controls
 		if(Gdx.input.isKeyPressed(Input.Keys.A)){
 			player1.moveLeft(Gdx.graphics.getDeltaTime());
@@ -206,5 +198,9 @@ public boolean mouseMoved(int screenX, int screenY) {
 public boolean scrolled(int amount) {
 	// TODO Auto-generated method stub
 	return false;
+}
+
+public void dispose() {
+	tiledMap.dispose();
 }
 }

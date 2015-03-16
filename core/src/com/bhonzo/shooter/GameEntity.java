@@ -1,14 +1,15 @@
 package com.bhonzo.shooter;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 
-public class GameEntity {
+public class GameEntity extends Sprite {
 	
 	private static int nextID = 0; 
 	private final int id; 
 	private final Vector2 position ; 
 	private final Vector2 heading ; 
-	private boolean active = true; 
+	private boolean active = true;
 	public GameEntity()
 	{id = nextID++;
 	
@@ -50,5 +51,7 @@ public class GameEntity {
 	{
 		return this.heading;
 	}
+	
+
 
 }
