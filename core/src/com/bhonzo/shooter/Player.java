@@ -11,19 +11,22 @@ import com.badlogic.gdx.math.Vector2;
 
 @SuppressWarnings("unused")
 public class Player extends Soldier {
-		Rectangle 				bottom, left, right, top, full;
+		//Vector2 				playerPosition = new Vector2();
 		Sprite 					sprite;
-		Texture 				texture;
+		//Texture 				texture;
 		
 		private Vector2 velocity = new Vector2();
 		private Vector2 newPos = new Vector2();
 		private float speed = 60 * 2;
-		private float gravity = 60 * 1.8f;
+		private float gravity = 0;
+		private float resistance = 0.2f;
 		private TiledMapTileLayer collisionLayer;
 
 	public Player(float health, TiledMapTileLayer collisionLayer) {
 		super(health);
-		bottom 	= 	new Rectangle(0, 0, 64, 8);
+		
+		
+		
 		sprite 	= 	new Sprite(new Texture("enemy.png"));	
 		this.collisionLayer = collisionLayer;
 		
@@ -32,59 +35,70 @@ public class Player extends Soldier {
 	
 	public void draw(Batch batch){
 		update(Gdx.graphics.getDeltaTime());
+		sprite.setPosition(getPosition().x, getPosition().y);
 		sprite.draw(batch);
 	}
 	
-	public void update(float delta) {
-		
-
+	public void update(float delta) {	
 		// apply gravity
-		velocity.y -= gravity * delta;
+		//velocity.y -= gravity * delta;
 		// clamp velocity
-		if(velocity.y > speed){
+		if(velocity.y > speed)
+		{
 			velocity.y = speed;
-			}
-		else if(velocity.y < -speed){
+		}
+		else if(velocity.y < -speed)
+		{
 			velocity.y = -speed;
-			}
+		}
 		// save old positions
-		float oldX = getX();
-		float oldY = getY();
-		float tileWidth = collisionLayer.getTileWidth(), tileHeight = collisionLayer.getTileHeight();
+		float oldX = getPosition().x;
+		float oldY = getPosition().y;
+		
+		float tileWidth = collisionLayer.getTileWidth();
+		float tileHeight = collisionLayer.getTileHeight();
 		
 		boolean collisionX = false, collisionY = false;
-		
-		
 		// move on x
-		setX(getX() + velocity.x * delta);
-		
+		setPositionX(getPosition().x + velocity.x * delta);
+		setPositionY(getPosition().y + velocity.y * delta);
+		velocity.x = velocity.x * resistance;
+		velocity.y = velocity.y * resistance;
+		/*
 		if(velocity.x < 0){
-			// top left
-			collisionX = collisionLayer.getCell((int) (getX() / tileWidth), (int)((getY() + getHeight()) / tileHeight)).getTile().getProperties().containsKey("blocked");
-			
+			// top left			
+			collisionX = collisionLayer.getCell((int) (playerPosition.x / tileWidth), (int)((playerPosition.y + getHeight()) / tileHeight)).getTile().getProperties().containsKey("blocked");
+						 
+			if(collisionX){
+			System.out.println("you hit a wall top left");}
 			// middle left
-			if(!collisionX)
-				collisionX = collisionLayer.getCell((int) (getX() / tileWidth), (int)((getY() + getHeight() / 2) / tileHeight)).getTile().getProperties().containsKey("blocked");
-			
+			if(!collisionX){
+				collisionX = collisionLayer.getCell((int) (playerPosition.x / tileWidth), (int)((playerPosition.y + getHeight() / 2) / tileHeight)).getTile().getProperties().containsKey("blocked");
+				System.out.println("you hit a wall middle left");}
 			// bottom left
-			if(!collisionX)
-				collisionX = collisionLayer.getCell((int) (getX() / tileWidth), (int)(getY() / tileHeight)).getTile().getProperties().containsKey("blocked");
-		}
+			if(!collisionX){
+				collisionX = collisionLayer.getCell((int) (playerPosition.x / tileWidth), (int)(playerPosition.y / tileHeight)).getTile().getProperties().containsKey("blocked");
+				System.out.println("you hit a wall bottom left");}
+		}	
 		else if(velocity.x > 0){
 			// top right
-			collisionX = collisionLayer.getCell((int) ((getX() + getWidth() / tileWidth)), (int) ((getY() + getHeight()) / tileHeight)).getTile().getProperties().containsKey("blocked");
+			collisionX = collisionLayer.getCell((int) ((playerPosition.x + getWidth() / tileWidth)), (int) ((playerPosition.y + getHeight()) / tileHeight)).getTile().getProperties().containsKey("blocked");
+			if(collisionX){
+				System.out.println("you hit a wall top right");}
 			// middle right
-			if(!collisionX)
-				collisionX = collisionLayer.getCell((int) ((getX() + getWidth()) / tileWidth), (int)((getY() + getHeight() / 2) / tileHeight)).getTile().getProperties().containsKey("blocked");
+			if(!collisionX){
+				collisionX = collisionLayer.getCell((int) ((playerPosition.x + getWidth()) / tileWidth), (int)((playerPosition.y + getHeight() / 2) / tileHeight)).getTile().getProperties().containsKey("blocked");
+			System.out.println("you hit a wall middle right");}
 			// bottom right
-			if(!collisionX)
-				collisionX = collisionLayer.getCell((int) ((getX() + getWidth()) / tileWidth), (int) (getY() / tileHeight)).getTile().getProperties().containsKey("blocked");
+			if(!collisionX){
+				collisionX = collisionLayer.getCell((int) ((playerPosition.x + getWidth()) / tileWidth), (int) (playerPosition.y / tileHeight)).getTile().getProperties().containsKey("blocked");
+			System.out.println("you hit a wall bottom right");}
 		}
 		
 		//react to x collision
 		if(collisionX){
-			setX(oldX);
-			velocity.x=0;
+			playerPosition.set(oldX, oldY);
+			velocity.x = 0;
 		}
 			
 		
@@ -93,58 +107,54 @@ public class Player extends Soldier {
 		
 		if(velocity.y < 0){
 			//bottom left
-			collisionY = collisionLayer.getCell((int) ((getX() / tileWidth)), (int) (getY() / tileHeight)).getTile().getProperties().containsKey("blocked");
+			collisionY = collisionLayer.getCell((int) ((playerPosition.x / tileWidth)), (int) (playerPosition.y / tileHeight)).getTile().getProperties().containsKey("blocked");
+			if(collisionY){
+				System.out.println("you hit a wall bottom left");}
 			//bottom middle
-			if(!collisionY)
-				collisionY = collisionLayer.getCell((int) ((getX() + getWidth() / 2) / tileWidth), (int) (getY() / tileHeight)).getTile().getProperties().containsKey("blocked");
+			if(!collisionY){
+				collisionY = collisionLayer.getCell((int) ((playerPosition.x + getWidth() / 2) / tileWidth), (int) (playerPosition.y / tileHeight)).getTile().getProperties().containsKey("blocked");
+				System.out.println("you hit a wall bottom middle");}
 			//bottom right
-			if(!collisionY)
-				collisionY = collisionLayer.getCell((int) ((getX() + getWidth()) / tileWidth), (int) (getY() / tileHeight)).getTile().getProperties().containsKey("blocked");				
+			if(!collisionY){
+				collisionY = collisionLayer.getCell((int) ((playerPosition.x + getWidth()) / tileWidth), (int) (playerPosition.y / tileHeight)).getTile().getProperties().containsKey("blocked");
+				System.out.println("you hit a wall bottom right");}
 			}
 		else if(velocity.y > 0){
 			//top left
-			collisionY = collisionLayer.getCell((int) ((getX()) / tileWidth), (int) ((getY() + getHeight()) / tileHeight)).getTile().getProperties().containsKey("blocked");
-			
+			collisionY = collisionLayer.getCell((int) ((playerPosition.x) / tileWidth), (int) ((playerPosition.y + getHeight()) / tileHeight)).getTile().getProperties().containsKey("blocked");
+			System.out.println("you hit a wall top left");			
 			// top middle
-			if(!collisionY)
-				collisionY = collisionLayer.getCell((int) ((getX() + getWidth() / 2) / tileWidth ), (int) ((getY() + getHeight()) / tileHeight)).getTile().getProperties().containsKey("blocked");
-		
+			if(!collisionY){
+				collisionY = collisionLayer.getCell((int) ((playerPosition.x + getWidth() / 2) / tileWidth ), (int) ((playerPosition.y + getHeight()) / tileHeight)).getTile().getProperties().containsKey("blocked");
+				System.out.println("you hit a wall top middle");}	
 			// top right
-			if(!collisionY)
-				collisionY = collisionLayer.getCell((int) ((getX() + getWidth()) / tileWidth ), (int) ((getY() + getHeight()) / tileHeight)).getTile().getProperties().containsKey("blocked");
+			if(!collisionY){
+				collisionY = collisionLayer.getCell((int) ((playerPosition.x + getWidth()) / tileWidth ), (int) ((playerPosition.y + getHeight()) / tileHeight)).getTile().getProperties().containsKey("blocked");
+				System.out.println("you hit a wall top right");}
 		}
 		
 				//react to Y collision
 				if(collisionY){
 					setY(oldY);
 					velocity.y=0;
-				}				
+				}	*/			
 	}
 	
-	public void setPosition(float x, float y) {
-		bottom.x = 	x;
-		bottom.y = 	y;
-		sprite.setPosition(x, y);
-	}
 	
 	public void moveLeft(float delta){
-		bottom.x -= (100 * delta);
-		sprite.setPosition(bottom.x, bottom.y);		
+		velocity.x -= (100);
 	}
 	
 	public void moveRight(float delta){
-			bottom.x += (100 * delta);
-			sprite.setPosition(bottom.x, bottom.y);		
+			velocity.x += (100);
 		}
 		
 	public void moveUp(float delta){
-		bottom.y += (100 * delta);
-		sprite.setPosition(bottom.x, bottom.y);
+		velocity.y += (100);	
 	}
 	
 	public void moveDown(float delta){
-		bottom.y -= (100 * delta);
-		sprite.setPosition(bottom.x, bottom.y);		
+		velocity.y -= (100);	
 	}
 
 	public Vector2 getVelocity() {
@@ -179,6 +189,6 @@ public class Player extends Soldier {
 		this.collisionLayer = collisionLayer;
 	}
 
-	
+		
 	
 }

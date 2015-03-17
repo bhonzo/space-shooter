@@ -4,13 +4,13 @@
   <image source="tiles.png" width="8192" height="2048"/>
   <tile id="2816">
    <properties>
-    <property name="blocked" value="blocked"/>
+    <property name="blocked" value=""/>
    </properties>
   </tile>
  </tileset>
  <layer name="Tile Layer 1" width="20" height="20">
   <data encoding="base64" compression="zlib">
-   eJytVDkOwDAIC3PfnX93r/BB8YAUhWCMgdRzToXtBmyKxzjU5w2KUfHdGflYLKppg4d4u3iqbqZfxwHlYvopbdQ908CdU4Xnzl+XJ7EfSTzV32m9iJ+rzbZe9w+Y4Clfqh9srzf83Bn9ay8+LI15
+   eJxj5GZgYKQypgZoQTKvBYqR5UjBMIBuHqWYEvPwhR+55lHbfSPFPFzhT4l5uNjkYnzm4QO4wolW5mELV2LNI8bv5LgPn98JmYcrnQzl+KAmBgDzP3bX
   </data>
  </layer>
 </map>

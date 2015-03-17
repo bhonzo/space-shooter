@@ -30,6 +30,14 @@ public class GameEntity extends Sprite {
 		// TODO Auto-generated method stub
 		return id;
 	}
+	
+	public void setPositionX(float x){
+		position.x = x;
+	}
+	
+	public void setPositionY(float y){
+		position.y = y;
+	}
 
 	public void setPosition(Vector2 newpos) {
 		// TODO Auto-generated method stub
