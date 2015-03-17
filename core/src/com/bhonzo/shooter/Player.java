@@ -182,4 +182,3 @@ public class Player extends Soldier {
 	
 	
 }
-//change
